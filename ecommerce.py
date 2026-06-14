@@ -1,3 +1,11 @@
+def ver_catalogo():
+    for produto in catalogo.values():
+        print(f"Nome: {produto['nome']}")
+        print(f"Preço: R${produto['preco']:.2f}")
+        print(f"Categoria: {produto['categoria']}")
+        print("-" * 20)
+
+
 catalogo = {
     "Produto1": {"nome": "Jaqueta", "preco": 279.79, "categoria": "frio", "quantidade": 10},
     "Produto2": {"nome": "Calça", "preco": 199.99, "categoria": "frio", "quantidade": 15},
@@ -17,3 +25,6 @@ menu_opcao = int(input("O QUE VOCE DESEJA FAZER?\n"
       "6 - Aplicar cupom de desconto\n"
       "7 - Finalizar pedido\n\n"
       "0 - Sair\n"))
+
+if menu_opcao == 1:
+    ver_catalogo()
