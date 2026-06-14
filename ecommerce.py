@@ -7,6 +7,13 @@ catalogo = {
     "Produto6": {"nome": "Pulseira", "preco": 79.99, "categoria": "acessorios", "quantidade": 15}
 }
 
-def busca():
-    prod_busca = input("Procure o produto por nome ou categoria: ")
-    for
+print("==== Bem-vindo ao Henrique Shop ====\n\n")
+menu_opcao = int(input("O QUE VOCE DESEJA FAZER?\n"
+      "1 - Ver catalogo\n"
+      "2- Buscar produto\n"
+      "3 - Adicionar produto ao carrinho\n"
+      "4 - Remover produto do carrinho\n"
+      "5 - Ver valor total do carrinho\n"
+      "6 - Aplicar cupom de desconto\n"
+      "7 - Finalizar pedido\n\n"
+      "0 - Sair\n"))
