@@ -29,7 +29,6 @@ def add_carrinho():
 
             if qtde <= produto['quantidade']:
                 carrinho[produto['nome']] = qtde
-                produto['quantidade'] -= qtde
                 print(f"{qtde}x {produto['nome']} adicionado ao carrinho")
             else:
                 print("Estoque insuficiente")
@@ -37,6 +36,49 @@ def add_carrinho():
     if achou == False:
         print("Produto não disponível em estoque")
 
+def ver_carrinho():
+    if not carrinho:
+        print("Carrinho vazio")
+
+    total = 0
+
+    for produto_nome, qtde in carrinho.items():
+        for produto_cat in catalogo.values():
+            if produto_cat['nome'] == produto_nome:
+                subtotal = produto_cat['preco'] * qtde
+                total += subtotal
+                print(f"- {produto_nome}: {qtde}x R${produto_cat['preco']:.2f} = R${subtotal:.2f}")
+
+
+    for produto, qtde in carrinho.items():
+        print(f"- {produto}: {qtde}x")
+
+
+def delete_carrinho():
+    if not carrinho:
+        print("Seu carrinho esta vazio")
+
+    remover = input("Qual item voce deseja remover (nome)?\n")
+
+    produto_encontrado = None
+    for produto in carrinho.keys():
+        if produto.lower() == remover.lower():
+            produto_encontrado = produto
+            break
+
+    if produto_encontrado:
+        qtde_remover = int(input(f"Quantos '{produto_encontrado} deseja remover?\n"))
+
+        if qtde_remover >= carrinho[produto_encontrado]:
+            del carrinho[produto_encontrado]
+            print(f"{produto_encontrado} foi removido do carrinho.")
+        else:
+            carrinho[produto_encontrado] -= qtde_remover
+            print(f"{qtde_remover}x '{produto_encontrado}' removidos.")
+    else:
+        print("Esse produto não está no seu carrinho.")
+
+def aplicar_cupom():
 
 
 catalogo = {
@@ -50,14 +92,15 @@ catalogo = {
 
 carrinho = {}
 
+
 while True:
     print("==== Bem-vindo ao Henrique Shop ====\n\n")
     menu_opcao = int(input("O QUE VOCE DESEJA FAZER?\n"
           "1 - Ver catalogo\n"
           "2- Buscar produto\n"
           "3 - Adicionar produto ao carrinho\n"
-          "4 - Remover produto do carrinho\n"
-          "5 - Ver valor total do carrinho\n"
+          "4 - Ver carrinho\n"                 
+          "5 - Remover produto do carrinho\n"
           "6 - Aplicar cupom de desconto\n"
           "7 - Finalizar pedido\n\n"
           "0 - Sair\n"))
@@ -68,6 +111,12 @@ while True:
         buscar_produto()
     elif menu_opcao == 3:
         add_carrinho()
+    elif menu_opcao == 4:
+        ver_carrinho()
+    elif menu_opcao == 5:
+        delete_carrinho()
+    elif menu_opcao == 6:
+        aplicar_cupom()
 
     elif menu_opcao == 0:
         break
