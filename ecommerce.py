@@ -3,6 +3,7 @@ def ver_catalogo():
         print(f"Nome: {produto['nome']}")
         print(f"Preço: R${produto['preco']:.2f}")
         print(f"Categoria: {produto['categoria']}")
+        print(f"Quantidade: {produto['quantidade']}")
         print("-" * 20)
 
 def buscar_produto():
@@ -28,11 +29,11 @@ def add_carrinho():
 
             if qtde <= produto['quantidade']:
                 carrinho[produto['nome']] = qtde
-            print(f"{qtde}x {produto['nome']} adicionado ao carrinho")
-        else:
-            print("Estoque insuficiente")
-
-        break
+                produto['quantidade'] -= qtde
+                print(f"{qtde}x {produto['nome']} adicionado ao carrinho")
+            else:
+                print("Estoque insuficiente")
+            break
     if achou == False:
         print("Produto não disponível em estoque")
 
@@ -49,20 +50,26 @@ catalogo = {
 
 carrinho = {}
 
-print("==== Bem-vindo ao Henrique Shop ====\n\n")
-menu_opcao = int(input("O QUE VOCE DESEJA FAZER?\n"
-      "1 - Ver catalogo\n"
-      "2- Buscar produto\n"
-      "3 - Adicionar produto ao carrinho\n"
-      "4 - Remover produto do carrinho\n"
-      "5 - Ver valor total do carrinho\n"
-      "6 - Aplicar cupom de desconto\n"
-      "7 - Finalizar pedido\n\n"
-      "0 - Sair\n"))
+while True:
+    print("==== Bem-vindo ao Henrique Shop ====\n\n")
+    menu_opcao = int(input("O QUE VOCE DESEJA FAZER?\n"
+          "1 - Ver catalogo\n"
+          "2- Buscar produto\n"
+          "3 - Adicionar produto ao carrinho\n"
+          "4 - Remover produto do carrinho\n"
+          "5 - Ver valor total do carrinho\n"
+          "6 - Aplicar cupom de desconto\n"
+          "7 - Finalizar pedido\n\n"
+          "0 - Sair\n"))
 
-if menu_opcao == 1:
-    ver_catalogo()
-elif menu_opcao == 2:
-    buscar_produto()
-elif menu_opcao == 3:
-    add_carrinho()
+    if menu_opcao == 1:
+        ver_catalogo()
+    elif menu_opcao == 2:
+        buscar_produto()
+    elif menu_opcao == 3:
+        add_carrinho()
+
+    elif menu_opcao == 0:
+        break
+    else:
+        print("Digite um numero valido")
