@@ -6,6 +6,7 @@ def ver_catalogo():
         print(f"Quantidade: {produto['quantidade']}")
         print("-" * 20)
 
+
 def buscar_produto():
     busca  = input("Busque o produto (nome ou categoria): \n")
     achou = False
@@ -17,6 +18,7 @@ def buscar_produto():
             achou = True
     if achou == False:
         print("Produto não disponível em estoque")
+
 
 def add_carrinho():
     adicionar = input("Nome do produto para adicionar: \n")
@@ -36,6 +38,7 @@ def add_carrinho():
     if achou == False:
         print("Produto não disponível em estoque")
 
+
 def ver_carrinho():
     if not carrinho:
         print("Carrinho vazio")
@@ -54,6 +57,7 @@ def ver_carrinho():
         print(f"TOTAL COM DESCONTO: R${total_com_desconto:.2f}\n")
     else:
         print(f"TOTAL: R${total:.2f}\n")
+
 
 def delete_carrinho():
     if not carrinho:
@@ -80,6 +84,7 @@ def delete_carrinho():
     else:
         print("Esse produto não está no seu carrinho.")
 
+
 def aplicar_cupom():
     global desconto
     if not carrinho:
@@ -99,6 +104,22 @@ def aplicar_cupom():
         print("Cupom inválido ou expirado.")
 
 
+def finalizar_pedido():
+    global carrinho, desconto
+    if not carrinho:
+        print("Seu carrinho está vazio. Adicione produtos antes de finalizar.")
+        return
+
+    for produto_nome, bought_qtde in carrinho.items():
+        for produto_cat in catalogo.values():
+            if produto_cat['nome'] == produto_nome:
+                produto_cat['quantidade'] -= bought_qtde
+                print(f"Baixa no estoque: {produto_nome} (-{bought_qtde})")
+                break
+
+    print("\nPedido finalizado com sucesso no Henrique Shop! Volte sempre.")
+    carrinho = {}
+    desconto = 1.0
 
 
 catalogo = {
@@ -138,6 +159,8 @@ while True:
         delete_carrinho()
     elif menu_opcao == 6:
         aplicar_cupom()
+    elif menu_opcao == 7:
+        finalizar_pedido()
 
     elif menu_opcao == 0:
         break
