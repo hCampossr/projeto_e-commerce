@@ -39,7 +39,7 @@ def add_carrinho():
 def ver_carrinho():
     if not carrinho:
         print("Carrinho vazio")
-
+        return
     total = 0
 
     for produto_nome, qtde in carrinho.items():
@@ -48,15 +48,17 @@ def ver_carrinho():
                 subtotal = produto_cat['preco'] * qtde
                 total += subtotal
                 print(f"- {produto_nome}: {qtde}x R${produto_cat['preco']:.2f} = R${subtotal:.2f}")
-
-
-    for produto, qtde in carrinho.items():
-        print(f"- {produto}: {qtde}x")
-
+    if desconto < 1.0:
+        total_com_desconto = total * desconto
+        print(f"Subtotal: R${total:.2f}")
+        print(f"TOTAL COM DESCONTO: R${total_com_desconto:.2f}\n")
+    else:
+        print(f"TOTAL: R${total:.2f}\n")
 
 def delete_carrinho():
     if not carrinho:
         print("Seu carrinho esta vazio")
+        return
 
     remover = input("Qual item voce deseja remover (nome)?\n")
 
@@ -79,6 +81,24 @@ def delete_carrinho():
         print("Esse produto não está no seu carrinho.")
 
 def aplicar_cupom():
+    global desconto
+    if not carrinho:
+        print("Carrinho vazio. Não é possível adicionar cupom")
+    incupom = input("Insira um cupom: ").upper()
+    if incupom in cupom:
+        if incupom == "HENRIQUE10":
+            desconto = 0.90
+            print("Cupom HENRIQUE10 aplicado com sucesso!")
+        elif incupom == "PUCTECH20":
+            desconto = 0.80
+            print("Cupom PUCTECH20 aplicado com sucesso!")
+        elif incupom == "LOJA15":
+            desconto = 0.85
+            print("Cupom LOJA15 aplicado com sucesso!")
+    else:
+        print("Cupom inválido ou expirado.")
+
+
 
 
 catalogo = {
@@ -91,7 +111,8 @@ catalogo = {
 }
 
 carrinho = {}
-
+cupom = ["HENRIQUE10", "PUCTECH20", "LOJA15"]
+desconto = 1.0
 
 while True:
     print("==== Bem-vindo ao Henrique Shop ====\n\n")
