@@ -7,11 +7,35 @@ def ver_catalogo():
 
 def buscar_produto():
     busca  = input("Busque o produto (nome ou categoria): \n")
+    achou = False
     for produto in catalogo.values():
         if (produto['nome'] == busca or produto['categoria'] == busca):
             print(f"Nome: {produto['nome']}\n"
                   f"Preço: R${produto['preco']:.2f}\n"
                   f"Categoria: {produto['categoria']}\n")
+            achou = True
+    if achou == False:
+        print("Produto não disponível em estoque")
+
+def add_carrinho():
+    adicionar = input("Nome do produto para adicionar: \n")
+    qtde = int(input("Quantidade: "))
+    achou = False
+
+    for produto in catalogo.values():
+        if (produto['nome'].lower() == adicionar.lower()):
+            achou = True
+
+            if qtde <= produto['quantidade']:
+                carrinho[produto['nome']] = qtde
+            print(f"{qtde}x {produto['nome']} adicionado ao carrinho")
+        else:
+            print("Estoque insuficiente")
+
+        break
+    if achou == False:
+        print("Produto não disponível em estoque")
+
 
 
 catalogo = {
@@ -22,6 +46,8 @@ catalogo = {
     "Produto5": {"nome": "Corrente", "preco": 89.90, "categoria": "Acessorios", "quantidade": 25},
     "Produto6": {"nome": "Pulseira", "preco": 79.99, "categoria": "Acessorios", "quantidade": 15}
 }
+
+carrinho = {}
 
 print("==== Bem-vindo ao Henrique Shop ====\n\n")
 menu_opcao = int(input("O QUE VOCE DESEJA FAZER?\n"
@@ -38,3 +64,5 @@ if menu_opcao == 1:
     ver_catalogo()
 elif menu_opcao == 2:
     buscar_produto()
+elif menu_opcao == 3:
+    add_carrinho()
