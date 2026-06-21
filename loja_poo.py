@@ -146,7 +146,7 @@ class Loja:
             print("Nenhum produto disponível em estoque com este nome ou categoria.")
         print("--------------------------")
 
-    # AJUSTE 1: Método finalizar_pedido agora está no nível correto dentro da Loja
+
     def finalizar_pedido(self):
         if not self.carrinho_atual.itens:
             print("Seu carrinho está vazio. Adicione produtos antes de finalizar.")
@@ -171,17 +171,19 @@ class Loja:
         self.carrinho_atual.limpar()
 
 
-# AJUSTE 2: Função executar_sistema totalmente para fora das classes
 def executar_sistema():
     minha_loja = Loja()
 
-    minha_loja.cadastrar_produto(1, Produto("Camiseta Estampada", 59.90, "Roupas", 20))
-    minha_loja.cadastrar_produto(2, Produto("Calça Jeans Slim", 120.00, "Roupas", 15))
-    minha_loja.cadastrar_produto(3, Produto("Tênis Esportivo", 249.99, "Calçados", 8))
-    minha_loja.cadastrar_produto(4, Produto("Meias Cano Curto", 15.50, "Acessórios", 50))
+    minha_loja.cadastrar_produto(1, Produto("Jaqueta", 279.79, "Frio", 10))
+    minha_loja.cadastrar_produto(2, Produto("Calça", 199.99, "Frio", 15))
+    minha_loja.cadastrar_produto(3, Produto("Bermuda", 129.29, "Calor", 15))
+    minha_loja.cadastrar_produto(4, Produto("Camiseta", 89.90, "Calor", 20))
+    minha_loja.cadastrar_produto(5, Produto("Corrente", 89.90, "Acessorios", 25))
+    minha_loja.cadastrar_produto(6, Produto("Pulseira", 79.99, "Acessorios", 15))
 
     minha_loja.cadastrar_cupom(CupomFixo("HENRIQUE10", 0.10))
     minha_loja.cadastrar_cupom(CupomFixo("SUPER20", 0.20))
+
 
     while True:
         print("\n=== HENRIQUE SHOP - VERSÃO POO ===")
@@ -194,3 +196,71 @@ def executar_sistema():
         print("7. Finalizar Pedido")
         print("8. Ver Histórico de Pedidos Fechados")
         print("9. Sair do Sistema")
+
+        opcao = input("Escolha uma opção: ").strip()
+
+        if opcao == "1":
+            print("\n--- CATÁLOGO DE PRODUTOS ---")
+            for id_prod, prod in minha_loja.catalogo.items():
+                print(f"ID: {id_prod} | {prod}")
+
+        elif opcao == "2":
+            termo = input("Digite o nome ou categoria que deseja buscar: ")
+            minha_loja.buscar_produto(termo)
+
+        elif opcao == "3":
+            try:
+                id_prod = int(input("Digite o ID do produto: "))
+                if id_prod in minha_loja.catalogo:
+                    qtde = int(input(f"Quantas unidades de '{minha_loja.catalogo[id_prod].nome}' deseja? "))
+                    if qtde > 0:
+                        minha_loja.carrinho_atual.adicionar(minha_loja.catalogo[id_prod], qtde)
+                    else:
+                        print("A quantidade deve ser maior que zero.")
+                else:
+                    print("ID de produto inválido.")
+            except ValueError:
+                print("Por favor, digite apenas números inteiros válidos.")
+
+        elif opcao == "4":
+            try:
+                id_prod = int(input("Digite o ID do produto que deseja remover: "))
+                if id_prod in minha_loja.catalogo:
+                    qtde = int(input("Quantidade a remover: "))
+                    minha_loja.carrinho_atual.remover(minha_loja.catalogo[id_prod], qtde)
+                else:
+                    print("ID de produto inválido.")
+            except ValueError:
+                print("Entrada inválida.")
+
+        elif opcao == "5":
+            print(minha_loja.carrinho_atual)
+
+        elif opcao == "6":
+            codigo = input("Digite o código do cupom: ").strip().upper()
+            if codigo in minha_loja.cupons:
+                minha_loja.carrinho_atual.cupom_aplicado = minha_loja.cupons[codigo]
+                print(f"Cupom '{codigo}' aplicado com sucesso!")
+            else:
+                print("Cupom inválido ou expirado.")
+
+        elif opcao == "7":
+            minha_loja.finalizar_pedido()
+
+        elif opcao == "8":
+            print("\n--- HISTÓRICO DE PEDIDOS DA LOJA ---")
+            if not minha_loja.historico_pedidos:
+                print("Nenhum pedido foi finalizado nesta sessão ainda.")
+            else:
+                for pedido in minha_loja.historico_pedidos:
+                    print(pedido)
+
+        elif opcao == "9":
+            print("Encerrando o Henrique Shop POO. Até mais!")
+            break
+        else:
+            print("Opção inválida! Tente novamente.")
+
+
+if __name__ == "__main__":
+    executar_sistema()
