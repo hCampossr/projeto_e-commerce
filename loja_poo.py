@@ -102,3 +102,67 @@ class Carrinho:
 
         res += f"TOTAL FINAL: R${self.calcular_total():.2f}\n"
         return res
+
+    class Pedido:
+        def __init__(self, id_pedido, itens_comprados, total_pago):
+            self.id_pedido = id_pedido
+            self.itens_comprados = itens_comprados
+            self.total_pago = total_pago
+
+        def __str__(self):
+            res = f"📦 RECOBIMENTO DO PEDIDO #{self.id_pedido}\n"
+            res += "Produtos comprados:\n"
+            for prod, qtde in self.itens_comprados.items():
+                res += f"  - {prod.nome} ({qtde}x)\n"
+            res += f"Valor total pago: R${self.total_pago:.2f}\n"
+            res += "--------------------------------------"
+            return res
+
+    class Loja:
+        def __init__(self):
+            self.catalogo = {}
+            self.cupons = {}
+            self.historico_pedidos = []
+            self.carrinho_atual = Carrinho()
+            self.__proximo_id_pedido = 1
+
+        def cadastrar_produto(self, id_prod, produto):
+            self.catalogo[id_prod] = produto
+
+        def cadastrar_cupom(self, cupom):
+            self.cupons[cupom.codigo] = cupom
+
+        def buscar_produto(self, termo):
+            achou = False
+            termo = termo.lower()
+            print("\n--- Resultado da Busca ---")
+            for prod in self.catalogo.values():
+                if termo in prod.nome.lower() or termo in prod.categoria.lower():
+                    print(prod)
+                    achou = True
+            if not achou:
+                print("Nenhum produto disponível em estoque com este nome ou categoria.")
+            print("--------------------------")
+
+        def finalizar_pedido(self):
+            if not self.carrinho_atual.itens:
+                print("Seu carrinho está vazio. Adicione produtos antes de finalizar.")
+                return
+
+            print("\n--- Finalizando Pedido ---")
+            for prod, qtde in self.carrinho_atual.itens.items():
+                prod.reduzir_estoque(qtde)
+                print(f"Baixa no estoque: {prod.nome} (-{qtde})")
+
+            novo_pedido = Pedido(
+                id_pedido=self.__proximo_id_pedido,
+                itens_comprados=self.carrinho_atual.itens.copy(),
+                total_pago=self.carrinho_atual.calcular_total()
+            )
+            self.historico_pedidos.append(novo_pedido)
+            self.__proximo_id_pedido += 1
+
+            print("\nPedido finalizado com sucesso no Henrique Shop! Volte sempre.")
+            print(novo_pedido)
+
+            self.carrinho_atual.limpar()
